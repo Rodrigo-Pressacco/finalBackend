@@ -1,0 +1,52 @@
+package com.dh.movieservice.api.controller;
+
+import com.dh.movieservice.api.service.impl.MovieServiceImpl;
+import com.dh.movieservice.domain.model.Movie;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+
+@Slf4j
+@RestController
+@RequestMapping("/movies")
+public class MovieController {
+
+	private MovieServiceImpl movieService;
+
+	@Autowired
+	public MovieController(MovieServiceImpl movieService) {
+		this.movieService = movieService;
+	}
+
+
+	@GetMapping("/{genre}")
+	public ResponseEntity<List<Movie>> findAllByGenre(@PathVariable String genre) {
+		log.info("Trayendo las peliculas con el genero "+ genre);
+		return ResponseEntity.ok().body(movieService.findAllByGenre(genre));
+	}
+
+	@PostMapping("/save")
+	public ResponseEntity<Movie> saveMovie(@RequestBody Movie movie) {
+		log.info("Guardando la pelicula "+ movie);
+		return ResponseEntity.ok().body(movieService.saveMovie(movie));
+	}
+
+	@GetMapping("")
+	public ResponseEntity<List<Movie>> findAll() {
+		log.info("Trayendo todas las peliculas");
+		return ResponseEntity.ok().body(movieService.getAllMovies());
+	}
+
+
+
+	@DeleteMapping("/delete/{name}")
+	public ResponseEntity<?> deleteByName(@PathVariable String name) {
+		movieService.deleteByName(name);
+		log.info("Borrando la pelicula con el nombre "+ name);
+		return ResponseEntity.ok().body("Se borro su pelicula");
+	}
+
+}
