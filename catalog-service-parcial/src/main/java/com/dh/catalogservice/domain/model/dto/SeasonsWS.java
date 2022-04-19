@@ -15,5 +15,6 @@ public class SeasonsWS {
     private Integer seasonNumber;
     private List<ChapterWS> chapters;
 
-
+    public SeasonsWS() {
+    }
 }

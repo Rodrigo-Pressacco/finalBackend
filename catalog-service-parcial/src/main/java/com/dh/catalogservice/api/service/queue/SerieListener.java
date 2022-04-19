@@ -20,7 +20,7 @@ public class SerieListener {
     @RabbitListener(queues = {"${queue.serie.name}"})
     public void receive(@Payload SerieWS serie){
         // crear un metodo para guardar
-        log.info("Se guardo una pelicula en el catologo de "+ serie.getGenre());
+        log.info("Se guardo una serie en el catologo de "+ serie.getGenre());
         catalogService.saveSerieOnCatalog(serie);
     }
 }

@@ -14,4 +14,6 @@ public class SerieWS {
     private String genre;
     private List<SeasonsWS> seasons;
 
+    public SerieWS() {
+    }
 }
