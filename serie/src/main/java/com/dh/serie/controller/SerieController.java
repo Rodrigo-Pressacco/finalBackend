@@ -2,6 +2,7 @@ package com.dh.serie.controller;
 
 import com.dh.serie.model.Serie;
 import com.dh.serie.service.SerieService;
+import com.dh.serie.service.queue.SerieSender;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -13,10 +14,12 @@ import org.springframework.web.bind.annotation.*;
 public class SerieController {
 
     private final SerieService serieService;
+    public final SerieSender serieSender;
 
     @Autowired
-    public SerieController(SerieService serieService) {
+    public SerieController(SerieService serieService, SerieSender serieSender) {
         this.serieService = serieService;
+        this.serieSender = serieSender;
     }
 
     @GetMapping()
@@ -34,7 +37,9 @@ public class SerieController {
     @PostMapping("save")
     public ResponseEntity<Serie> saveSerie(@RequestBody Serie serie) {
         log.info("Guardando la serie "+ serie);
-        return ResponseEntity.ok().body(serieService.saveSerie(serie));
+        var resultado = serieService.saveSerie(serie);
+        serieSender.send(resultado);
+        return ResponseEntity.ok().body(resultado);
     }
 
     @DeleteMapping("/delete/{name}")

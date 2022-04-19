@@ -1,6 +1,7 @@
 package com.dh.catalogservice.domain.model.dto;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import lombok.AllArgsConstructor;
 import lombok.Data;
 
 @Data

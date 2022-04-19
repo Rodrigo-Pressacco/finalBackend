@@ -9,6 +9,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -26,8 +27,8 @@ public class MovieService {
         return movieFeignRepository.getMovie();
     }
 
-    //@CircuitBreaker(name = "catalogFromGenre",fallbackMethod = "moviesSerieFallbackMethod")
-    //@Retry(name = "catalogFromGenre")
+    @CircuitBreaker(name = "movie",fallbackMethod = "moviesFallbackMethod")
+    @Retry(name = "movie")
     public List<MovieWS> getAllMoviesByGenre(String genre){
         return movieFeignRepository.getMovieByGenre(genre);
     }
@@ -36,8 +37,9 @@ public class MovieService {
         return movieFeignRepository.saveMovie(movie);
     }
 
-    private void moviesSerieFallbackMethod(){
-        log.error("Circuit breaker was activated");
+    public List<MovieWS> moviesFallbackMethod(Throwable t){
+        log.error("Circuit breaker was activated: {}", t.getMessage());
+        return new ArrayList<>();
     }
 
 }

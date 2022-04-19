@@ -3,9 +3,12 @@ package com.dh.catalogservice.api.service;
 
 import com.dh.catalogservice.domain.model.dto.SerieWS;
 import com.dh.catalogservice.domain.repository.serieFeignRepository;
+import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
+import io.github.resilience4j.retry.annotation.Retry;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -14,7 +17,7 @@ public class SerieService {
 
     private serieFeignRepository serieFeignRepository;
 
-    public SerieService(com.dh.catalogservice.domain.repository.serieFeignRepository serieFeignRepository) {
+    public SerieService(serieFeignRepository serieFeignRepository) {
         this.serieFeignRepository = serieFeignRepository;
     }
 
@@ -22,8 +25,8 @@ public class SerieService {
         return serieFeignRepository.getSerie();
     }
 
-    //@CircuitBreaker(name = "catalogFromGenre",fallbackMethod = "moviesSerieFallbackMethod")
-    //@Retry(name = "catalogFromGenre")
+    @CircuitBreaker(name = "catalogFromGenre",fallbackMethod = "serieFallbackMethod")
+    @Retry(name = "catalogFromGenre")
     public List<SerieWS> getAllMoviesByGenre(String genre){
         return serieFeignRepository.getSerieByGenre(genre);
     }
@@ -32,7 +35,9 @@ public class SerieService {
         return serieFeignRepository.saveSerie(serie);
     }
 
-    private void moviesSerieFallbackMethod(){
-        log.error("Circuit breaker was activated");
+    private List<SerieWS> serieFallbackMethod(Throwable t){
+        log.error("Circuit breaker was activated: {}", t.getMessage());
+
+        return new ArrayList<>();
     }
 }

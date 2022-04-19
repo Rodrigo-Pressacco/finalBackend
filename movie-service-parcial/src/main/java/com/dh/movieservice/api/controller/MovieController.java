@@ -1,5 +1,6 @@
 package com.dh.movieservice.api.controller;
 
+import com.dh.movieservice.api.queue.MovieSender;
 import com.dh.movieservice.api.service.impl.MovieServiceImpl;
 import com.dh.movieservice.domain.model.Movie;
 import lombok.extern.slf4j.Slf4j;
@@ -15,12 +16,13 @@ import java.util.List;
 public class MovieController {
 
 	private MovieServiceImpl movieService;
+	private MovieSender movieSender;
 
 	@Autowired
-	public MovieController(MovieServiceImpl movieService) {
+	public MovieController(MovieServiceImpl movieService, MovieSender movieSender) {
 		this.movieService = movieService;
+		this.movieSender = movieSender;
 	}
-
 
 	@GetMapping("/{genre}")
 	public ResponseEntity<List<Movie>> findAllByGenre(@PathVariable String genre) {
@@ -31,7 +33,9 @@ public class MovieController {
 	@PostMapping("/save")
 	public ResponseEntity<Movie> saveMovie(@RequestBody Movie movie) {
 		log.info("Guardando la pelicula "+ movie);
-		return ResponseEntity.ok().body(movieService.saveMovie(movie));
+		var resultado = movieService.saveMovie(movie);
+		movieSender.send(resultado);
+		return ResponseEntity.ok().body(resultado);
 	}
 
 	@GetMapping("")
@@ -39,8 +43,6 @@ public class MovieController {
 		log.info("Trayendo todas las peliculas");
 		return ResponseEntity.ok().body(movieService.getAllMovies());
 	}
-
-
 
 	@DeleteMapping("/delete/{name}")
 	public ResponseEntity<?> deleteByName(@PathVariable String name) {

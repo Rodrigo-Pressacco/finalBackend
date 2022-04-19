@@ -14,4 +14,6 @@ public class SeasonsWS {
     private Integer id;
     private Integer seasonNumber;
     private List<ChapterWS> chapters;
+
+
 }

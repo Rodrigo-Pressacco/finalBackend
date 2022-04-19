@@ -14,4 +14,7 @@ public class ChapterWS {
     private Integer number;
     private String urlStream;
 
+
+
+
 }

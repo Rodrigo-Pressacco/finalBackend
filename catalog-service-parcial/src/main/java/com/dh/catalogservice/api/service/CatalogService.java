@@ -1,39 +1,60 @@
 package com.dh.catalogservice.api.service;
 
-import com.dh.catalogservice.domain.model.dto.CatalogWS;
-import com.dh.catalogservice.domain.model.dto.MovieWS;
-import com.dh.catalogservice.domain.model.dto.SerieWS;
+import com.dh.catalogservice.domain.model.Catalog;
+import com.dh.catalogservice.domain.model.dto.*;
+import com.dh.catalogservice.domain.repository.catalogRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
 @Slf4j
 public class CatalogService {
 
-
+    private catalogRepository catalogRepository;
     private MovieService movieService;
     private SerieService serieService;
 
-    @Autowired
-    public CatalogService(MovieService movieService, SerieService serieService) {
+    public CatalogService(catalogRepository catalogRepository, MovieService movieService, SerieService serieService) {
+        this.catalogRepository = catalogRepository;
         this.movieService = movieService;
         this.serieService = serieService;
     }
 
-    public CatalogWS getCatalogFromGenre(String genre){
+    public Catalog getCatalogFromGenre(String genre){
 
         List<MovieWS> movieWSList = movieService.getAllMoviesByGenre(genre);
         List<SerieWS> serieWSList = serieService.getAllMoviesByGenre(genre);
 
-        return new CatalogWS(genre,movieWSList, serieWSList);
+        Catalog res = new Catalog(genre,movieWSList, serieWSList);
+        Catalog r = catalogRepository.findByGenre(genre).orElse(null);
+        if(r != null){
+            catalogRepository.deleteByGenre(genre);
+        }
+        catalogRepository.save(res);
+
+        return res;
     }
 
 
 
+    public Catalog saveMovieOnCatalog(MovieWS movieWS){
 
+        Catalog c = catalogRepository.findByGenre(movieWS.getGenre()).get();
+        c.getMoviesws().add(movieWS);
+        return catalogRepository.save(c);
+    }
+
+    public Catalog saveSerieOnCatalog(SerieWS serieWS){
+
+        Catalog c = catalogRepository.findByGenre(serieWS.getGenre()).get();
+
+        c.getSerieWS().add(serieWS);
+        return catalogRepository.save(c);
+    }
 
 
 }
