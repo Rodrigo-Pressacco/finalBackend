@@ -1,45 +1,29 @@
-version: '2.1'
+version: '2' # Version del docker-compose
 
 services:
-  configServer-service:
+  # Config Server
+  config-server:
     build: configServer/
     mem_limit: 512m
+    restart: always
     ports:
       - "8888:8888"
+    networks:
+      - backend2network
 
-  eureka-service:
+  # Eureka server
+  eureka-server:
     build: eureka-server/
     mem_limit: 512m
+    restart: always
     ports:
       - "8761:8761"
-
-  movie-service:
-    build: movie-service-parcial/
-    mem_limit: 512m
     depends_on:
-      mongodb:
-        condition: service_healthy
+      - "config-server"
+    networks:
+      - backend2network
 
-  serie-service:
-    build: serie/
-    mem_limit: 512m
-    depends_on:
-      monodb:
-        condition: service_healthy
-
-  catalog-service:
-    build: catalog-service-parcial/
-    mem_limit: 512m
-    depends_on:
-      monodb:
-        condition: service_healthy
-        
-  gateway-service:
-    build: gateway/
-    mem_limit: 512m
-    ports:
-      - "8080:8080"
-
+  # Base de datos MongoDB
   mongodb:
     image: mongo:4.4.2
     mem_limit: 512m
@@ -51,3 +35,94 @@ services:
       interval: 5s
       timeout: 2s
       retries: 60
+    volumes:
+      - ./configInit/mongo-init.js:/docker-entrypoint-initdb.d/mongo-init.js:ro
+    networks:
+      - backend2network
+
+  # Microservicio de Mensajeria
+  rabbit-mq:
+    image: rabbitmq:3.8.14-management
+    restart: always
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    volumes:
+      - ./configInit/rabbitmq.conf:/etc/rabbitmq/rabbitmq.conf:ro
+      - ./configInit/definitions.json:/etc/rabbitmq/definitions.json:ro
+    networks:
+      - backend2network
+
+# Microservicio de Trazas
+  zipkin:
+    image: openzipkin/zipkin
+    restart: always
+    ports:
+     - "9411:9411"
+    networks:
+      - backend2network
+
+  # Microservicio Movies
+  movie-service:
+    build: movie-service-parcial/
+    mem_limit: 512m
+    restart: always
+    depends_on:
+      - "config-server"
+      - "eureka-server"
+      - "rabbit-mq"
+      - "zipkin"
+      - "mongodb"
+    networks:
+      - backend2network
+
+  # Microservicio Serie
+  serie-service:
+    build: serie/
+    mem_limit: 512m
+    restart: always
+    depends_on:
+      - "config-server"
+      - "eureka-server"
+      - "rabbit-mq"
+      - "zipkin"
+      - "monodb"
+    networks:
+      - backend2network
+
+  # Microservicio Catalog
+  catalog-service:
+    build: catalog-service-parcial/
+    mem_limit: 512m
+    restart: always
+    depends_on:
+      - "config-server"
+      - "eureka-server"
+      - "movie-service"
+      - "serie-service"
+      - "rabbit-mq"
+      - "zipkin"
+      - "monodb"
+    networks:
+      - backend2network
+
+  # Microservicio de Gateway  
+  gateway-service:
+    build: gateway/
+    mem_limit: 512m
+    restart: always
+    depends_on:
+      - "config-server"
+      - "eureka-server"
+      - "movie-service"
+      - "serie-service"
+      - "catalog-service"
+      - "zipkin"
+    ports:
+      - "8085:8085"
+    networks:
+      - backend2network
+
+# Configuración de red interna
+networks:
+  backend2network:

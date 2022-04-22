@@ -15,13 +15,13 @@ import java.util.List;
 @LoadBalancerClient(name = "movie-service", configuration= CustomLoadBalancerConfiguration.class)
 public interface movieFeignRepository {
 
-    @GetMapping("/movies/{genre}")
+    @GetMapping("/{genre}")
     List<MovieWS> getMovieByGenre(@PathVariable String genre);
 
-    @PostMapping("/movies/save")
+    @PostMapping("/save")
     MovieWS saveMovie(@RequestBody MovieWS movie);
 
-    @GetMapping("/movies/all")
+    @GetMapping("/all")
     List<MovieWS> getMovie();
 
 

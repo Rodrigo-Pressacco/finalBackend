@@ -1,0 +1,28 @@
+{
+    "vhosts": [
+      {
+        "name": "/"
+      }
+    ],
+    "queues": [
+      {
+        "name": "movieQueue",
+        "vhost": "/",
+        "durable": true,
+        "auto_delete": false,
+        "arguments": {}
+      },{
+        "name": "serieQueue",
+        "vhost": "/",
+        "durable": true,
+        "auto_delete": false,
+        "arguments": {}
+      },{
+        "name": "catalogQueue",
+        "vhost": "/",
+        "durable": true,
+        "auto_delete": false,
+        "arguments": {}
+      }
+    ]
+  }

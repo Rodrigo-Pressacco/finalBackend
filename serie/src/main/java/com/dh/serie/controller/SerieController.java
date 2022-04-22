@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.*;
 
 @Slf4j
 @RestController
-@RequestMapping("/series")
+@RequestMapping("")
 public class SerieController {
 
     private final SerieService serieService;

@@ -15,12 +15,12 @@ import java.util.List;
 @LoadBalancerClient(name = "serie-service", configuration= CustomLoadBalancerConfiguration.class)
 public interface serieFeignRepository {
 
-    @GetMapping("/series/{genre}")
+    @GetMapping("/{genre}")
     List<SerieWS> getSerieByGenre(@PathVariable String genre);
 
-    @PostMapping("/series/save")
+    @PostMapping("/save")
     SerieWS saveSerie(@RequestBody SerieWS serie);
 
-    @GetMapping("/series/all")
+    @GetMapping("/all")
     List<SerieWS> getSerie();
 }

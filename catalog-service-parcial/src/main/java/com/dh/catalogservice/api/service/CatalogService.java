@@ -43,17 +43,29 @@ public class CatalogService {
 
     public Catalog saveMovieOnCatalog(MovieWS movieWS){
 
-        Catalog c = catalogRepository.findByGenre(movieWS.getGenre()).get();
-        c.getMoviesws().add(movieWS);
-        return catalogRepository.save(c);
+
+        Catalog r = catalogRepository.findByGenre(movieWS.getGenre()).orElse(null);
+        if(r == null){
+            Catalog c = new Catalog(movieWS.getGenre(), new ArrayList<>(), new ArrayList<>() );
+            c.getMoviesws().add(movieWS);
+            catalogRepository.save(c);
+        }
+
+        r.getMoviesws().add(movieWS);
+        return catalogRepository.save(r);
     }
 
     public Catalog saveSerieOnCatalog(SerieWS serieWS){
 
-        Catalog c = catalogRepository.findByGenre(serieWS.getGenre()).get();
+        Catalog r = catalogRepository.findByGenre(serieWS.getGenre()).orElse(null);
+        if(r == null){
+            Catalog c = new Catalog(serieWS.getGenre(), new ArrayList<>(), new ArrayList<>() );
+            c.getSerieWS().add(serieWS);
+            catalogRepository.save(c);
+        }
 
-        c.getSerieWS().add(serieWS);
-        return catalogRepository.save(c);
+        r.getSerieWS().add(serieWS);
+        return catalogRepository.save(r);
     }
 
 
