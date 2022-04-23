@@ -1,5 +1,9 @@
 version: '2' # Version del docker-compose
 
+# Configuración de red interna
+networks:
+  backend2network:
+
 services:
   # Config Server
   config-server:
@@ -19,7 +23,7 @@ services:
     ports:
       - "8761:8761"
     depends_on:
-      - "config-server"
+      - config-server
     networks:
       - backend2network
 
@@ -29,12 +33,6 @@ services:
     mem_limit: 512m
     ports:
       - "27017:27017"
-    command: mongod
-    healthcheck:
-      test: "mongo --eval 'db.stats().ok'"
-      interval: 5s
-      timeout: 2s
-      retries: 60
     volumes:
       - ./configInit/mongo-init.js:/docker-entrypoint-initdb.d/mongo-init.js:ro
     networks:
@@ -68,11 +66,11 @@ services:
     mem_limit: 512m
     restart: always
     depends_on:
-      - "config-server"
-      - "eureka-server"
-      - "rabbit-mq"
-      - "zipkin"
-      - "mongodb"
+      - config-server
+      - eureka-server
+      - rabbit-mq
+      - zipkin
+      - mongodb
     networks:
       - backend2network
 
@@ -82,11 +80,11 @@ services:
     mem_limit: 512m
     restart: always
     depends_on:
-      - "config-server"
-      - "eureka-server"
-      - "rabbit-mq"
-      - "zipkin"
-      - "monodb"
+      - config-server
+      - eureka-server
+      - rabbit-mq
+      - zipkin
+      - mongodb
     networks:
       - backend2network
 
@@ -96,13 +94,13 @@ services:
     mem_limit: 512m
     restart: always
     depends_on:
-      - "config-server"
-      - "eureka-server"
-      - "movie-service"
-      - "serie-service"
-      - "rabbit-mq"
-      - "zipkin"
-      - "monodb"
+      - config-server
+      - eureka-server
+      - movie-service
+      - serie-service
+      - rabbit-mq
+      - zipkin
+      - mongodb
     networks:
       - backend2network
 
@@ -112,17 +110,14 @@ services:
     mem_limit: 512m
     restart: always
     depends_on:
-      - "config-server"
-      - "eureka-server"
-      - "movie-service"
-      - "serie-service"
-      - "catalog-service"
-      - "zipkin"
+      - config-server
+      - eureka-server
+      - movie-service
+      - serie-service
+      - catalog-service
+      - zipkin
     ports:
       - "8085:8085"
     networks:
       - backend2network
 
-# Configuración de red interna
-networks:
-  backend2network:
