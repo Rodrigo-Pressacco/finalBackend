@@ -14,11 +14,11 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "localhost:8085/catalog-service/comedia",
+							"raw": "localhost:8081/catalog-service/comedia",
 							"host": [
 								"localhost"
 							],
-							"port": "8085",
+							"port": "8081",
 							"path": [
 								"catalog-service",
 								"comedia"
@@ -33,11 +33,11 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "localhost:8085/movie-service/comedia",
+							"raw": "localhost:8081/movie-service/comedia",
 							"host": [
 								"localhost"
 							],
-							"port": "8085",
+							"port": "8081",
 							"path": [
 								"movie-service",
 								"comedia"
@@ -52,11 +52,11 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "localhost:8085/serie-service/comedia",
+							"raw": "localhost:8081/serie-service/comedia",
 							"host": [
 								"localhost"
 							],
-							"port": "8085",
+							"port": "8081",
 							"path": [
 								"serie-service",
 								"comedia"
@@ -80,11 +80,11 @@
 							}
 						},
 						"url": {
-							"raw": "localhost:8085/serie-service/save",
+							"raw": "localhost:8081/serie-service/save",
 							"host": [
 								"localhost"
 							],
-							"port": "8085",
+							"port": "8081",
 							"path": [
 								"serie-service",
 								"save"
@@ -94,7 +94,7 @@
 					"response": []
 				},
 				{
-					"name": "New Request",
+					"name": "NewMovie",
 					"request": {
 						"method": "POST",
 						"header": [],
@@ -108,11 +108,11 @@
 							}
 						},
 						"url": {
-							"raw": "localhost:8085/movie-service/save",
+							"raw": "localhost:8081/movie-service/save",
 							"host": [
 								"localhost"
 							],
-							"port": "8085",
+							"port": "8081",
 							"path": [
 								"movie-service",
 								"save"
@@ -136,7 +136,7 @@
 								"header": [],
 								"body": {
 									"mode": "raw",
-									"raw": "{\r\n    \"name\": \"Test\",\r\n    \"genre\": \"comedia\",\r\n    \"seasons\": [\r\n            {\r\n            \"id\": 1,\r\n            \"seasonNumber\": 1,\r\n            \"chapters\": [\r\n                    {\r\n                        \"id\": 1,\r\n                        \"name\": \"Winter Is Coming\",\r\n                        \"number\": 1,\r\n                        \"urlStream\": \"http/Winter Is Coming\"\r\n                    },\r\n                    {\r\n                        \"id\": 2,\r\n                        \"name\": \"The Kingsroad\",\r\n                        \"number\": 2,\r\n                        \"urlStream\": \"The Kingsroad\"\r\n                    },\r\n                    {\r\n                        \"id\": 3,\r\n                        \"name\": \"Lord Snow\",\r\n                        \"number\": 3,\r\n                        \"urlStream\": \"http/Lord Snow\"\r\n                    }\r\n                ]\r\n            },\r\n        {\r\n            \"id\": 2,\r\n            \"seasonNumber\": 2,\r\n            \"chapters\": [\r\n                {\r\n                    \"id\": 4,\r\n                    \"name\": \"Cripples, Bastards, and Broken Things\",\r\n                    \"number\": 1,\r\n                    \"urlStream\": \"http/Cripples, Bastards, and Broken Things\"\r\n                },\r\n                {\r\n                    \"id\": 5,\r\n                    \"name\": \"The Wolf and the Lion\",\r\n                    \"number\": 2,\r\n                    \"urlStream\": \"http/The Wolf and the Lion\"\r\n                },\r\n                {\r\n                    \"id\": 6,\r\n                    \"name\": \"A Golden Crown\",\r\n                    \"number\": 3,\r\n                    \"urlStream\": \"http/A Golden Crown\"\r\n                }\r\n            ]\r\n        }\r\n    ]\r\n}\r\n",
+									"raw": "{\r\n    \"name\": \"Test1\",\r\n    \"genre\": \"comedia\",\r\n    \"seasons\": [\r\n            {\r\n            \"id\": 1,\r\n            \"seasonNumber\": 1,\r\n            \"chapters\": [\r\n                    {\r\n                        \"id\": 1,\r\n                        \"name\": \"Winter Is Coming\",\r\n                        \"number\": 1,\r\n                        \"urlStream\": \"http/Winter Is Coming\"\r\n                    },\r\n                    {\r\n                        \"id\": 2,\r\n                        \"name\": \"The Kingsroad\",\r\n                        \"number\": 2,\r\n                        \"urlStream\": \"The Kingsroad\"\r\n                    },\r\n                    {\r\n                        \"id\": 3,\r\n                        \"name\": \"Lord Snow\",\r\n                        \"number\": 3,\r\n                        \"urlStream\": \"http/Lord Snow\"\r\n                    }\r\n                ]\r\n            },\r\n        {\r\n            \"id\": 2,\r\n            \"seasonNumber\": 2,\r\n            \"chapters\": [\r\n                {\r\n                    \"id\": 4,\r\n                    \"name\": \"Cripples, Bastards, and Broken Things\",\r\n                    \"number\": 1,\r\n                    \"urlStream\": \"http/Cripples, Bastards, and Broken Things\"\r\n                },\r\n                {\r\n                    \"id\": 5,\r\n                    \"name\": \"The Wolf and the Lion\",\r\n                    \"number\": 2,\r\n                    \"urlStream\": \"http/The Wolf and the Lion\"\r\n                },\r\n                {\r\n                    \"id\": 6,\r\n                    \"name\": \"A Golden Crown\",\r\n                    \"number\": 3,\r\n                    \"urlStream\": \"http/A Golden Crown\"\r\n                }\r\n            ]\r\n        }\r\n    ]\r\n}\r\n",
 									"options": {
 										"raw": {
 											"language": "json"
@@ -144,11 +144,11 @@
 									}
 								},
 								"url": {
-									"raw": "localhost:8098/save",
+									"raw": "localhost:8084/save",
 									"host": [
 										"localhost"
 									],
-									"port": "8098",
+									"port": "8084",
 									"path": [
 										"save"
 									]
@@ -162,13 +162,13 @@
 								"method": "GET",
 								"header": [],
 								"url": {
-									"raw": "localhost:57594/series",
+									"raw": "localhost:8084/",
 									"host": [
 										"localhost"
 									],
-									"port": "57594",
+									"port": "8084",
 									"path": [
-										"series"
+										""
 									]
 								}
 							},
@@ -180,11 +180,11 @@
 								"method": "GET",
 								"header": [],
 								"url": {
-									"raw": "localhost:60850/comedia",
+									"raw": "localhost:8084/comedia",
 									"host": [
 										"localhost"
 									],
-									"port": "60850",
+									"port": "8084",
 									"path": [
 										"comedia"
 									]
@@ -198,14 +198,14 @@
 								"method": "DELETE",
 								"header": [],
 								"url": {
-									"raw": "localhost:8098/delete/Game",
+									"raw": "localhost:8084/delete/Test1",
 									"host": [
 										"localhost"
 									],
-									"port": "8098",
+									"port": "8084",
 									"path": [
 										"delete",
-										"Game"
+										"Test1"
 									]
 								}
 							},
@@ -231,11 +231,11 @@
 									}
 								},
 								"url": {
-									"raw": "localhost:8097/save",
+									"raw": "localhost:8083/save",
 									"host": [
 										"localhost"
 									],
-									"port": "8097",
+									"port": "8083",
 									"path": [
 										"save"
 									]
@@ -249,11 +249,11 @@
 								"method": "GET",
 								"header": [],
 								"url": {
-									"raw": "localhost:60837/",
+									"raw": "localhost:8083/",
 									"host": [
 										"localhost"
 									],
-									"port": "60837",
+									"port": "8083",
 									"path": [
 										""
 									]
@@ -267,11 +267,11 @@
 								"method": "GET",
 								"header": [],
 								"url": {
-									"raw": "localhost:60837/comedia",
+									"raw": "localhost:8083/comedia",
 									"host": [
 										"localhost"
 									],
-									"port": "60837",
+									"port": "8083",
 									"path": [
 										"comedia"
 									]
@@ -285,11 +285,11 @@
 								"method": "DELETE",
 								"header": [],
 								"url": {
-									"raw": "localhost:8097/delete/Jackass",
+									"raw": "localhost:8083/delete/Jackass",
 									"host": [
 										"localhost"
 									],
-									"port": "8097",
+									"port": "8083",
 									"path": [
 										"delete",
 										"Jackass"
@@ -309,11 +309,11 @@
 								"method": "GET",
 								"header": [],
 								"url": {
-									"raw": "localhost:61022/comedia",
+									"raw": "localhost:8085/comedia",
 									"host": [
 										"localhost"
 									],
-									"port": "61022",
+									"port": "8085",
 									"path": [
 										"comedia"
 									]

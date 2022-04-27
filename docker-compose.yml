@@ -1,4 +1,4 @@
-version: '2' # Version del docker-compose
+version: '3' # Version del docker-compose
 
 # Configuración de red interna
 networks:
@@ -8,35 +8,53 @@ services:
   # Config Server
   config-server:
     build: configServer/
-    mem_limit: 512m
     restart: always
     ports:
       - "8888:8888"
     networks:
       - backend2network
+    depends_on:
+      - zipkin
+    healthcheck:
+      test: "curl -f http://config-server:8888/actuator/health || exit 1"
+      interval: 20s
+      timeout: 10s
+      retries: 5
+
 
   # Eureka server
   eureka-server:
     build: eureka-server/
-    mem_limit: 512m
     restart: always
     ports:
       - "8761:8761"
     depends_on:
-      - config-server
+      config-server:
+        condition: service_healthy
     networks:
       - backend2network
+    healthcheck:
+      test: "curl -f http://eureka-server:8761/actuator/health || exit 1"
+      interval: 20s
+      timeout: 5s
+      retries: 5
+
 
   # Base de datos MongoDB
   mongodb:
     image: mongo:4.4.2
-    mem_limit: 512m
     ports:
       - "27017:27017"
     volumes:
       - ./configInit/mongo-init.js:/docker-entrypoint-initdb.d/mongo-init.js:ro
     networks:
       - backend2network
+    healthcheck:
+      test: "mongo --eval 'db.stats().ok'"
+      interval: 5s
+      timeout: 2s
+      retries: 60
+
 
   # Microservicio de Mensajeria
   rabbit-mq:
@@ -59,65 +77,70 @@ services:
      - "9411:9411"
     networks:
       - backend2network
+    depends_on:
+      rabbit-mq:
+        condition: service_started
 
   # Microservicio Movies
   movie-service:
     build: movie-service-parcial/
-    mem_limit: 512m
     restart: always
     depends_on:
-      - config-server
-      - eureka-server
-      - rabbit-mq
-      - zipkin
-      - mongodb
+      config-server:
+        condition: service_healthy
+      eureka-server:
+        condition: service_healthy
+      mongodb:
+        condition: service_healthy
     networks:
       - backend2network
+    ports:
+      - "8083:8083"
 
   # Microservicio Serie
   serie-service:
     build: serie/
-    mem_limit: 512m
     restart: always
     depends_on:
-      - config-server
-      - eureka-server
-      - rabbit-mq
-      - zipkin
-      - mongodb
+      config-server:
+        condition: service_healthy
+      eureka-server:
+        condition: service_healthy
+      mongodb:
+        condition: service_healthy
     networks:
       - backend2network
+    ports:
+      - "8084:8084"
 
   # Microservicio Catalog
   catalog-service:
     build: catalog-service-parcial/
-    mem_limit: 512m
     restart: always
     depends_on:
-      - config-server
-      - eureka-server
-      - movie-service
-      - serie-service
-      - rabbit-mq
-      - zipkin
-      - mongodb
+      config-server:
+        condition: service_healthy
+      eureka-server:
+        condition: service_healthy
+      mongodb:
+        condition: service_healthy
     networks:
       - backend2network
+    ports:
+      - "8085:8085"
 
   # Microservicio de Gateway  
   gateway-service:
     build: gateway/
-    mem_limit: 512m
     restart: always
     depends_on:
-      - config-server
-      - eureka-server
-      - movie-service
-      - serie-service
-      - catalog-service
-      - zipkin
+      config-server:
+        condition: service_healthy
+      eureka-server:
+        condition: service_healthy
     ports:
-      - "8085:8085"
+      - "8081:8081"
     networks:
       - backend2network
+
 
