@@ -1,9 +1,5 @@
 version: '3' # Version del docker-compose
 
-# Configuración de red interna
-networks:
-  backend2network:
-
 services:
   # Config Server
   config-server:
@@ -45,6 +41,12 @@ services:
     image: mongo:4.4.2
     ports:
       - "27017:27017"
+    command: mongod
+    healthcheck:
+      test: "mongo --eval 'db.stats().ok'"
+      interval: 5s
+      timeout: 2s
+      retries: 60
     volumes:
       - ./configInit/mongo-init.js:/docker-entrypoint-initdb.d/mongo-init.js:ro
     networks:
@@ -142,5 +144,4 @@ services:
       - "8081:8081"
     networks:
       - backend2network
-
 
