@@ -1,5 +1,8 @@
 version: '3' # Version del docker-compose
 
+networks:
+  backend2network:
+
 services:
   # Config Server
   config-server:
@@ -85,7 +88,7 @@ services:
 
   # Microservicio Movies
   movie-service:
-    build: movie-service-parcial/
+    build: movie-service/
     restart: always
     depends_on:
       config-server:
@@ -101,7 +104,7 @@ services:
 
   # Microservicio Serie
   serie-service:
-    build: serie/
+    build: serie-service/
     restart: always
     depends_on:
       config-server:
@@ -117,7 +120,7 @@ services:
 
   # Microservicio Catalog
   catalog-service:
-    build: catalog-service-parcial/
+    build: catalog-service/
     restart: always
     depends_on:
       config-server:
